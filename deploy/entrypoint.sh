@@ -15,7 +15,7 @@ TOKEN="$BASE64_HEADER.$BASE64_PAYLOAD.$BASE64_SIGNATURE"
 
 BASE64_TOKEN=$(echo -n "$TOKEN" | base64 -w 0)
 
-sed -i 's/{BASE64_TOKEN}/'${BASE64_TOKEN}'/g' manifests/deploy-service.yaml.tmpl
+sed -i 's/{BASE64_TOKEN}/'${BASE64_TOKEN}'/g' manifests/deploy-service.yaml
 
 kubectl apply -f manifests/deploy-frontend.yaml
 kubectl apply -f manifests/deploy-controller.yaml
