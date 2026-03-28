@@ -1,0 +1,14 @@
+FROM scratch
+COPY . .
+ENV cloudDomain=${cloudDomain:-"127.0.0.1.nip.io"}
+ENV cloudPort=${cloudPort:-"443"}
+COPY --from=ghcr.io/labring/sealos-cloud-objectstorage-frontend:latest registry registry
+COPY --from=ghcr.io/labring/sealos-cloud-objectstorage-frontend:latest manifests/deploy.yaml.tmpl manifests/deploy-frontend.yaml.tmpl
+
+COPY --from=ghcr.io/labring/sealos-cloud-objectstorage-controller:latest registry registry
+COPY --from=ghcr.io/labring/sealos-cloud-objectstorage-controller:latest manifests/deploy.yaml.tmpl manifests/deploy-controller.yaml.tmpl
+
+COPY --from=ghcr.io/labring/sealos-cloud-minio-service:latest registry registry
+COPY --from=ghcr.io/labring/sealos-cloud-minio-service:latest manifests/deploy.yaml.tmpl manifests/deploy-service.yaml.tmpl
+
+CMD ["bash entrypoint.sh"]
